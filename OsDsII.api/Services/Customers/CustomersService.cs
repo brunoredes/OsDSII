@@ -1,4 +1,4 @@
-using OsDsII.Repositories;
+using OsDsII.DAL.Repositories;
 using OsDsII.DAL;
 using OsDsII.Models;
 using OsDsII.Exceptions;

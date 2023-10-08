@@ -11,7 +11,7 @@ namespace OsDsII.Exceptions
                 $"{resource} not found",
                 HttpStatusCode.NotFound,
                 StatusCodes.Status404NotFound,
-                null,
+                new HttpContextAccessor()?.HttpContext?.Request.Path,
                 DateTimeOffset.UtcNow,
                 null
             )

@@ -1,6 +1,6 @@
 using Moq;
 using OsDsII.Services;
-using OsDsII.Repositories;
+using OsDsII.DAL.Repositories;
 using OsDsII.Models;
 using OsDsII.DAL;
 using OsDsII.Exceptions;

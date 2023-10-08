@@ -1,8 +1,13 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace OsDsII.Models
 {
     public class ServiceOrderInput : BaseEntity
     {
-        public string Description { get; set; }
+        [NotNull]
+        public string Description { get; set; } = "";
+        
+        [AllowNull]
         public double Price { get; set; }
     }
 }

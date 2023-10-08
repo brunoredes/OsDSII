@@ -4,7 +4,7 @@ using OsDsII.DTOS;
 using OsDsII.Models;
 using OsDsII.Services;
 using OsDsII.DAL;
-using OsDsII.Repositories;
+using OsDsII.DAL.Repositories;
 
 
 var builder = WebApplication.CreateBuilder(args);

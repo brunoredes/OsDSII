@@ -23,12 +23,13 @@ namespace OsDsII.Models
         public string Description { get; set; } = null!;
 
         [ForeignKey("service_order_id")]
+        [Column("send_date")]
         public int ServiceOrderId { get; set; }
 
         [NotNull]
         [Column("send_date")]
         [Timestamp]
-        public DateTimeOffset SendDate { get; set; }
+        public DateTimeOffset SendDate { get; set; } = DateTimeOffset.UtcNow;
 
         public ServiceOrder ServiceOrder { get; set; } = null!;
 

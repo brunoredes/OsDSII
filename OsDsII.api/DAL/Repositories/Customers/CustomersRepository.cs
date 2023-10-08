@@ -2,7 +2,7 @@ using OsDsII.Data;
 using OsDsII.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace OsDsII.Repositories
+namespace OsDsII.DAL.Repositories
 {
     public class CustomersRepository : ICustomersRepository
     {

@@ -1,6 +1,6 @@
 using OsDsII.Models;
 
-namespace OsDsII.Repositories
+namespace OsDsII.DAL.Repositories
 {
     public interface ICustomersRepository
     {

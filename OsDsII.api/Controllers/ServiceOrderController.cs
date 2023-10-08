@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using OsDsII.Models;
 using OsDsII.Data;
 using OsDsII.DTOS;
+using OsDsII.Exceptions;
+
 namespace OsDsII.Controllers
 {
     [ApiController]
@@ -89,9 +91,9 @@ namespace OsDsII.Controllers
                 return NoContent();
 
             }
-            catch (Exception ex)
+            catch (BaseException ex)
             {
-                return BadRequest(new {Message = ex.Message, StatusCode = 400});
+                return ex.GetResponse();
             }
         }
 

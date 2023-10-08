@@ -11,7 +11,7 @@ namespace OsDsII.Exceptions
                 ErrorCode.BAD_REQUEST,
                 message,
                 HttpStatusCode.NotFound,
-                StatusCodes.Status404NotFound,
+                StatusCodes.Status400BadRequest,
                 null,
                 DateTimeOffset.UtcNow,
                 null
