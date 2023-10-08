@@ -92,11 +92,27 @@ namespace OsDsII.Controllers
                     serviceOrder.FinishOS();
                     _dataContext.ServiceOrders.Update(serviceOrder);
                     await _dataContext.SaveChangesAsync();
-                    return Ok();
+                    return NoContent();
                 }
                 return BadRequest();
             }
             catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPut("{id}/status/cancel")]
+        public async Task<IActionResult> CancelServiceOrder(int id)
+        {
+            try
+            {
+                ServiceOrder serviceOrder = await _dataContext.ServiceOrders.FirstOrDefaultAsync(s => id == s.Id);
+                serviceOrder.Cancel();
+                await _dataContext.SaveChangesAsync();
+                return NoContent();
+            }
+            catch(Exception ex)
             {
                 return BadRequest();
             }

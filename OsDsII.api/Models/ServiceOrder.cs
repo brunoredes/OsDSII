@@ -5,6 +5,7 @@ using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using OsDsII.DTOS.Builders;
 using OsDsII.DTOS;
+using OsDsII.Exceptions;
 
 namespace OsDsII.Models
 {
@@ -57,13 +58,23 @@ namespace OsDsII.Models
 
         public void FinishOS()
         {
-            if (CannotFinish())
+            if (!CannotFinish())
             {
-                throw new Exception();
+                throw new BadRequestException("Service order cannot be finished");
             }
 
             Status = StatusServiceOrder.FINISHED;
             FinishDate = DateTimeOffset.Now;
+        }
+
+        public void Cancel()
+        {
+            if(!CannotFinish())
+            {
+                throw new BadRequestException("Service order cannot be canceled");
+            }
+
+            Status = StatusServiceOrder.CANCELED;
         }
 
         public ServiceOrderDTO ToServiceOrder()
