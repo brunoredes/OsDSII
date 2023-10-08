@@ -82,23 +82,16 @@ namespace OsDsII.Controllers
             try
             {
                 ServiceOrder serviceOrder = await _dataContext.ServiceOrders.FirstOrDefaultAsync(serviceOrder => serviceOrder.Id == id);
-                if (serviceOrder is null)
-                {
-                    throw new Exception();
-                }
 
-                if (serviceOrder.CanFinish())
-                {
-                    serviceOrder.FinishOS();
-                    _dataContext.ServiceOrders.Update(serviceOrder);
-                    await _dataContext.SaveChangesAsync();
-                    return NoContent();
-                }
-                return BadRequest();
+                serviceOrder.FinishOS();
+                // _dataContext.ServiceOrders.Update(serviceOrder);
+                await _dataContext.SaveChangesAsync();
+                return NoContent();
+
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(new {Message = ex.Message, StatusCode = 400});
             }
         }
 
@@ -112,7 +105,7 @@ namespace OsDsII.Controllers
                 await _dataContext.SaveChangesAsync();
                 return NoContent();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest();
             }

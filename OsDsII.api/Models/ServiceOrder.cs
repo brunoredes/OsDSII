@@ -50,15 +50,9 @@ namespace OsDsII.Models
         {
             return StatusServiceOrder.OPEN.Equals(Status);
         }
-
-        public bool CannotFinish()
-        {
-            return !CanFinish();
-        }
-
         public void FinishOS()
         {
-            if (!CannotFinish())
+            if (!CanFinish())
             {
                 throw new BadRequestException("Service order cannot be finished");
             }
@@ -69,7 +63,7 @@ namespace OsDsII.Models
 
         public void Cancel()
         {
-            if(!CannotFinish())
+            if (!CanFinish())
             {
                 throw new BadRequestException("Service order cannot be canceled");
             }
