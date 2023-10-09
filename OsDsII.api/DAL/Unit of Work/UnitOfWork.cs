@@ -1,5 +1,5 @@
 using OsDsII.Data;
-namespace OsDsII.DAL
+namespace OsDsII.DAL.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {

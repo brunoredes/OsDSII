@@ -108,9 +108,9 @@ namespace OsDsII.Controllers
                 await _dataContext.SaveChangesAsync();
                 return NoContent();
             }
-            catch (Exception ex)
+            catch (BaseException ex)
             {
-                return BadRequest();
+                return ex.GetResponse();
             }
         }
     }

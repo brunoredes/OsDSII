@@ -54,7 +54,7 @@ namespace OsDsII.Models
         {
             if (!CanFinish())
             {
-                throw new BadRequestException("Service order cannot be finished");
+                throw new BadRequestException($"Service order cannot be finished due to current status {Status}");
             }
 
             Status = StatusServiceOrder.FINISHED;
@@ -65,7 +65,7 @@ namespace OsDsII.Models
         {
             if (!CanFinish())
             {
-                throw new BadRequestException("Service order cannot be canceled");
+                throw new BadRequestException($"Service order cannot be canceled due to current status {Status}");
             }
 
             Status = StatusServiceOrder.CANCELED;

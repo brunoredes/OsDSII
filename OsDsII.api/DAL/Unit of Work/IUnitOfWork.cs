@@ -1,4 +1,4 @@
-namespace OsDsII.DAL
+namespace OsDsII.DAL.UnitOfWork
 {
     public interface IUnitOfWork
     {

@@ -1,4 +1,5 @@
 using OsDsII.Models;
+using OsDsII.DTOS;
 
 namespace OsDsII.DAL.Repositories;
 public interface IServiceOrdersRepository

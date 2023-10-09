@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OsDsII.Data;
-using OsDsII.DTOS;
-using OsDsII.Models;
 using OsDsII.Services;
-using OsDsII.DAL;
+using OsDsII.DAL.UnitOfWork;
 using OsDsII.DAL.Repositories;
 
 
@@ -20,7 +18,9 @@ builder.Services.AddDbContext<DataContext>(options =>
 // Add services to the container.
 
 builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
+builder.Services.AddScoped<IServiceOrdersRepository, ServiceOrdersRepository>();
 builder.Services.AddScoped<ICustomersService, CustomersService>();
+builder.Services.AddScoped<IServiceOrdersService, ServiceOrdersService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
