@@ -3,6 +3,7 @@ using OsDsII.Data;
 using OsDsII.Services;
 using OsDsII.DAL.UnitOfWork;
 using OsDsII.DAL.Repositories;
+using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
