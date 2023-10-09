@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
-namespace OsDsII.Models
+namespace OsDsII.api.Models
 {
     [Index(nameof(Id))]
     [PrimaryKey(nameof(Id))]

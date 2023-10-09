@@ -1,7 +1,7 @@
-using OsDsII.Exceptions.Constraints;
+using OsDsII.api.Exceptions.constraints;
 using System.Net;
 
-namespace OsDsII.Exceptions
+namespace OsDsII.api.Exceptions
 {
     public class BadRequestException : BaseException
     {

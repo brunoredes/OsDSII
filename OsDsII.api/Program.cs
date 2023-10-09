@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using OsDsII.Data;
-using OsDsII.Services;
 using OsDsII.DAL.UnitOfWork;
-using OsDsII.DAL.Repositories;
 using System.Text.Json.Serialization;
-
+using OsDsII.api.DAL.Repositories.ServiceOrders;
+using OsDsII.api.Services.ServiceOrders;
+using OsDsII.api.DAL.Repositories.Customers;
+using OsDsII.api.Services.Customers;
+using OsDsII.api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();

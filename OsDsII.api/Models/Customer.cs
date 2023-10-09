@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using OsDsII.DTOS.Builders;
-using OsDsII.DTOS;
+using OsDsII.api.DTO.Builder;
+using OsDsII.api.DTO;
 
-namespace OsDsII.Models
+namespace OsDsII.api.Models
 {
     [Index(nameof(Email), IsUnique = true)]
     [PrimaryKey(nameof(Id))]
@@ -43,15 +43,6 @@ namespace OsDsII.Models
         public string Phone { get; set; }
 
         public List<ServiceOrder> ServiceOrders { get; set; }
-
-        public override bool Equals(object? obj)
-        {
-            return base.Equals(obj);
-        }
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
 
         public Customer()
         { }
@@ -91,6 +82,21 @@ namespace OsDsII.Models
                     .WithPhone(Phone)
                     .Build();
             return customerDto;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return obj is Customer customer &&
+                   Id == customer.Id &&
+                   Name == customer.Name &&
+                   Email == customer.Email &&
+                   Phone == customer.Phone &&
+                   EqualityComparer<List<ServiceOrder>>.Default.Equals(ServiceOrders, customer.ServiceOrders);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, Name, Email, Phone, ServiceOrders);
         }
     }
 }

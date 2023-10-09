@@ -1,5 +1,6 @@
-using OsDsII.Models;
-namespace OsDsII.DTOS.Builders
+using OsDsII.api.Models;
+
+namespace OsDsII.api.DTO.Builder
 {
     public class ServiceOrderDTOBuilder
     {

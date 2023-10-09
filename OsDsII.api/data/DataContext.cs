@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using OsDsII.Models;
+using OsDsII.api.Models;
 
-namespace OsDsII.Data
+namespace OsDsII.api.Data
 {
     public class DataContext : DbContext
     {

@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OsDsII.Data;
-using OsDsII.Models;
+using OsDsII.api.Data;
+using OsDsII.api.Models;
 
-namespace OsDsII.DAL.Repositories;
+namespace OsDsII.api.DAL.Repositories.ServiceOrders;
 
 public class ServiceOrdersRepository : IServiceOrdersRepository
 {

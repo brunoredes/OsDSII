@@ -1,8 +1,8 @@
-using OsDsII.Data;
-using OsDsII.Models;
 using Microsoft.EntityFrameworkCore;
+using OsDsII.api.Models;
+using OsDsII.api.Data;
 
-namespace OsDsII.DAL.Repositories
+namespace OsDsII.api.DAL.Repositories.Customers
 {
     public class CustomersRepository : ICustomersRepository
     {

@@ -1,4 +1,4 @@
-namespace OsDsII.Http
+namespace OsDsII.api.http
 {
     public record HttpErrorResponse
     {

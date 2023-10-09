@@ -1,5 +1,6 @@
-using OsDsII.Models;
-namespace OsDsII.DTOS
+using OsDsII.api.Models;
+
+namespace OsDsII.api.DTO
 {
     public record ServiceOrderDTO
     {
@@ -10,6 +11,6 @@ namespace OsDsII.DTOS
         public double Price { get; set; }
         public StatusServiceOrder Status { get; set; }
         public DateTimeOffset OpeningDate { get; set; }
-        public DateTimeOffset? FinishDate { get; set;}
+        public DateTimeOffset? FinishDate { get; set; }
     }
 }

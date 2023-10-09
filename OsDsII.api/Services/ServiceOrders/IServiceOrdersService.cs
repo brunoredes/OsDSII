@@ -1,7 +1,7 @@
-using OsDsII.Models;
-using OsDsII.DTOS;
+using OsDsII.api.Models;
+using OsDsII.api.DTO;
 
-namespace OsDsII.Services;
+namespace OsDsII.api.Services.ServiceOrders;
 public interface IServiceOrdersService
 {
     public Task<IEnumerable<ServiceOrderDTO>> GetServiceOrdersAsync();

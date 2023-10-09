@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OsDsII.Models;
-using OsDsII.Http;
-using OsDsII.Data;
+using OsDsII.api.http;
+using OsDsII.api.Models;
+using OsDsII.api.Data;
 
-namespace OsDsII.Controllers
+namespace OsDsII.api.Controllers
 {
 
     [ApiController]

@@ -1,4 +1,4 @@
-namespace OsDsII.Exceptions.Constraints;
+namespace OsDsII.api.Exceptions.constraints;
 public static class ErrorCode
 {
     public static string BAD_REQUEST = "OSDSII:001";

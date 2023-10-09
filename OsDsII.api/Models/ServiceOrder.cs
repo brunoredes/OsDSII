@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
-using OsDsII.DTOS.Builders;
-using OsDsII.DTOS;
-using OsDsII.Exceptions;
+using OsDsII.api.Exceptions;
+using OsDsII.api.DTO;
+using OsDsII.api.DTO.Builder;
 
-namespace OsDsII.Models
+namespace OsDsII.api.Models
 {
     [PrimaryKey(nameof(Id))]
     [Table("service_order")]

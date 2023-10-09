@@ -1,6 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 
-namespace OsDsII.Models
+namespace OsDsII.api.Models
 {
     public class BaseEntity
     {

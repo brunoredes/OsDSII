@@ -2,9 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using OsDsII.Http;
+using OsDsII.api.http;
 
-namespace OsDsII.Exceptions
+namespace OsDsII.api.Exceptions
 {
     public class BaseException : Exception
     {
@@ -21,7 +21,7 @@ namespace OsDsII.Exceptions
         {
             return new ContentResult
             {
-                StatusCode = ((int)StatusCode),
+                StatusCode = (int)StatusCode,
                 Content = JsonConvert.SerializeObject(HttpResponse, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }),
             };
         }

@@ -1,9 +1,11 @@
-using OsDsII.DAL.Repositories;
 using OsDsII.DAL.UnitOfWork;
-using OsDsII.DTOS;
-using OsDsII.Models;
-using OsDsII.Exceptions;
-namespace OsDsII.Services;
+using OsDsII.api.Exceptions;
+using OsDsII.api.Models;
+using OsDsII.api.DAL.Repositories.ServiceOrders;
+using OsDsII.api.DAL.Repositories.Customers;
+using OsDsII.api.DTO;
+
+namespace OsDsII.api.Services.ServiceOrders;
 public class ServiceOrdersService : IServiceOrdersService
 {
     private readonly IServiceOrdersRepository _serviceOrdersRepository;

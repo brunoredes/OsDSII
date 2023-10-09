@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 
-namespace OsDsII.Models
+namespace OsDsII.api.Models
 {
     public enum StatusServiceOrder
     {

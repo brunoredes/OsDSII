@@ -1,4 +1,4 @@
-namespace OsDsII.DTOS
+namespace OsDsII.api.DTO
 {
     public record CustomerDTO
     {

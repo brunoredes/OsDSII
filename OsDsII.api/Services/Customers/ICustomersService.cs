@@ -1,6 +1,6 @@
-using OsDsII.Models;
+using OsDsII.api.Models;
 
-namespace OsDsII.Services
+namespace OsDsII.api.Services.Customers
 {
     public interface ICustomersService
     {

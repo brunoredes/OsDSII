@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace OsDsII.Http
+namespace OsDsII.api.http
 {
     public class HttpResponseApi<T> where T : class
     {

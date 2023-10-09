@@ -1,4 +1,6 @@
-namespace OsDsII.DTOS.Builders
+using OsDsII.api.DTO;
+
+namespace OsDsII.api.DTO.Builder
 {
     public class CustomerDtoBuilder
     {

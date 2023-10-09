@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OsDsII.Models;
-using OsDsII.Data;
-using OsDsII.DTOS;
-using OsDsII.Services;
-using OsDsII.Exceptions;
-using OsDsII.Http;
+using OsDsII.api.Data;
+using OsDsII.api.Models;
+using OsDsII.api.Services.ServiceOrders;
+using OsDsII.api.DTO;
+using OsDsII.api.Exceptions;
+using OsDsII.api.http;
 
-namespace OsDsII.Controllers
+namespace OsDsII.api.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]

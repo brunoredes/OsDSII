@@ -1,4 +1,4 @@
-namespace OsDsII.Models;
+namespace OsDsII.api.Models;
 
 public class CommentInput
 {

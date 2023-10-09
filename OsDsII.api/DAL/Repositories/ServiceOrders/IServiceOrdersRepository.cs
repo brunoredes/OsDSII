@@ -1,7 +1,6 @@
-using OsDsII.Models;
-using OsDsII.DTOS;
+using OsDsII.api.Models;
 
-namespace OsDsII.DAL.Repositories;
+namespace OsDsII.api.DAL.Repositories.ServiceOrders;
 public interface IServiceOrdersRepository
 {
     public Task<IEnumerable<ServiceOrder>> GetAllServiceOrdersAsync();

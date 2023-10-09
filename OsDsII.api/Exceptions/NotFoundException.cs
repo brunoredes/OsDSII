@@ -1,6 +1,6 @@
 using System.Net;
-using OsDsII.Exceptions.Constraints;
-namespace OsDsII.Exceptions
+using OsDsII.api.Exceptions.constraints;
+namespace OsDsII.api.Exceptions
 {
     public class NotFoundException : BaseException
     {

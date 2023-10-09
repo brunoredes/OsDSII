@@ -1,9 +1,9 @@
-using OsDsII.DAL.Repositories;
 using OsDsII.DAL.UnitOfWork;
-using OsDsII.Models;
-using OsDsII.Exceptions;
+using OsDsII.api.Exceptions;
+using OsDsII.api.DAL.Repositories.Customers;
+using OsDsII.api.Models;
 
-namespace OsDsII.Services
+namespace OsDsII.api.Services.Customers
 {
     public class CustomersService : ICustomersService
     {
