@@ -86,7 +86,7 @@ namespace OsDsII.Controllers
                 ServiceOrder serviceOrder = await _dataContext.ServiceOrders.FirstOrDefaultAsync(serviceOrder => serviceOrder.Id == id);
 
                 serviceOrder.FinishOS();
-                // _dataContext.ServiceOrders.Update(serviceOrder);
+                _dataContext.ServiceOrders.Update(serviceOrder);
                 await _dataContext.SaveChangesAsync();
                 return NoContent();
 
@@ -104,6 +104,7 @@ namespace OsDsII.Controllers
             {
                 ServiceOrder serviceOrder = await _dataContext.ServiceOrders.FirstOrDefaultAsync(s => id == s.Id);
                 serviceOrder.Cancel();
+                _dataContext.ServiceOrders.Update(serviceOrder);
                 await _dataContext.SaveChangesAsync();
                 return NoContent();
             }

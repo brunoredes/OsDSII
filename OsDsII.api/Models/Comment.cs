@@ -23,7 +23,7 @@ namespace OsDsII.Models
         public string Description { get; set; } = null!;
 
         [ForeignKey("service_order_id")]
-        [Column("send_date")]
+        // [Column("service_order_id")]
         public int ServiceOrderId { get; set; }
 
         [NotNull]

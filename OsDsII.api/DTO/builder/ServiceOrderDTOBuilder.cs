@@ -3,7 +3,7 @@ namespace OsDsII.DTOS.Builders
 {
     public class ServiceOrderDTOBuilder
     {
-        private ServiceOrderDTO _serviceOrderDto = new ServiceOrderDTO();
+        private readonly ServiceOrderDTO _serviceOrderDto = new ServiceOrderDTO();
 
         public ServiceOrderDTOBuilder WithId(int id)
         {
