@@ -4,6 +4,9 @@ using OsDsII.api.DAL.Repositories.Customers;
 using OsDsII.api.DAL.Repositories.ServiceOrders;
 using OsDsII.api.Services.ServiceOrders;
 using OsDsII.DAL.UnitOfWork;
+using OsDsII.api.Models;
+using OsDsII.api.DTO;
+using OsDsII.api.Exceptions;
 
 namespace OsDsII.Tests.Services.ServiceOrders
 {
@@ -22,42 +25,52 @@ namespace OsDsII.Tests.Services.ServiceOrders
             _mockUnitOfWork = new Mock<IUnitOfWork>();
             _service = new ServiceOrdersService(_mockServiceOrdersRepository.Object, _mockCustomersRepository.Object, _mockUnitOfWork.Object);
         }
-        [TestMethod()]
-        public void ServiceOrdersServiceTest()
+
+        [TestMethod]
+        public async Task ShouldReturnAListOfServiceOrders()
         {
-            Assert.Fail();
+            List<ServiceOrder> expectedServiceOrders = new List<ServiceOrder>
+            {
+                new ServiceOrder { Id = 100001, Customer = new Customer { Id = 1, Name = "John Doe", Phone = "+5511999999999", Email = "johndoe@mail.com" }, OpeningDate = DateTimeOffset.Now, Description="Pegou fogo",},
+                new ServiceOrder { Id = 100002, Customer = new Customer { Id = 1, Name = "John Doe", Phone = "+5511999999999", Email = "johndoe@mail.com" }, OpeningDate = DateTimeOffset.UtcNow, Description="Pegou fogo",},
+            };
+            _mockServiceOrdersRepository.Setup(repo => repo.GetAllServiceOrdersAsync()).ReturnsAsync(expectedServiceOrders);
+
+            IEnumerable<ServiceOrderDTO> serviceOrdersDtoMock = expectedServiceOrders.Select(s => s.ToServiceOrder());
+
+            var result = await _service.GetServiceOrdersAsync();
+
+            CollectionAssert.AreEqual(serviceOrdersDtoMock.ToList(), result.ToList());
         }
 
-        [TestMethod()]
-        public void GetServiceOrdersAsyncTest()
+        [TestMethod]
+        public async Task ShouldReturnAValidServiceOrderIfIdExists()
         {
-            Assert.Fail();
+            const int serviceOrderId = 100005;
+            ServiceOrder expectedServiceOrder = new ServiceOrder
+
+            { Id = serviceOrderId, Customer = new Customer { Id = 1, Name = "John Doe", Phone = "+5511999999999", Email = "johndoe@mail.com" }, OpeningDate = DateTimeOffset.Now, Description = "Pegou fogo", };
+            _mockServiceOrdersRepository.Setup(repo => repo.GetServiceOrderByIdAsync(serviceOrderId)).ReturnsAsync(expectedServiceOrder);
+
+            ServiceOrderDTO serviceOrdersDtoMock = expectedServiceOrder.ToServiceOrder();
+
+            var result = await _service.GetServiceOrderByIdAsync(serviceOrderId);
+
+            Assert.AreEqual(serviceOrdersDtoMock, result);
         }
 
-        [TestMethod()]
-        public void GetServiceOrderByIdAsyncTest()
+        [TestMethod]
+        public void ShouldThrowANotFoundExceptionIfServiceOrderIdDontExists()
         {
-            Assert.Fail();
-        }
+            const int serviceOrderId = 100005;
+            _mockServiceOrdersRepository.Setup(repo => repo.GetServiceOrderByIdAsync(serviceOrderId)).ReturnsAsync((ServiceOrder)null);
 
-        [TestMethod()]
-        public void SaveServiceOrderTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void FinishServiceOrderAsyncTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CancelServiceOrderAsyncTest()
-        {
-            Assert.Fail();
+            Assert.ThrowsExceptionAsync<NotFoundException>(() => _service.GetServiceOrderByIdAsync(2));
         }
     }
+    // Assert.AreEqual falhou.
+    // //Esperado:<System.Linq.Enumerable+SelectListIterator`2[OsDsII.api.Models.ServiceOrder,OsDsII.api.DTO.ServiceOrderDTO]>.
+    // Real:<System.Linq.Enumerable+SelectListIterator`2[OsDsII.api.Models.ServiceOrder,OsDsII.api.DTO.ServiceOrderDTO]>. 
 }
 
 
