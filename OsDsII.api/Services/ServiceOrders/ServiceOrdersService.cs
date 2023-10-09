@@ -25,11 +25,11 @@ public class ServiceOrdersService : IServiceOrdersService
     public async Task<ServiceOrderDTO> GetServiceOrderByIdAsync(int id)
     {
         ServiceOrder serviceOrder = await _serviceOrdersRepository.GetServiceOrderByIdAsync(id);
-        ServiceOrderDTO serviceOrderDto = serviceOrder.ToServiceOrder();
-        if (serviceOrderDto is null)
+        if (serviceOrder is null)
         {
             throw new NotFoundException("Service Order");
         }
+        ServiceOrderDTO serviceOrderDto = serviceOrder.ToServiceOrder();
 
         return serviceOrderDto;
     }

@@ -42,6 +42,8 @@ namespace OsDsII.Models
         [AllowNull]
         public string Phone { get; set; }
 
+        public List<ServiceOrder> ServiceOrders { get; set; }
+
         public override bool Equals(object? obj)
         {
             return base.Equals(obj);
@@ -83,6 +85,7 @@ namespace OsDsII.Models
         public CustomerDTO ToCustomer()
         {
             CustomerDTO customerDto = new CustomerDtoBuilder()
+                    .WithId(Id)
                     .WithName(Name)
                     .WithEmail(Email)
                     .WithPhone(Phone)

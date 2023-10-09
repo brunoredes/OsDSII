@@ -4,6 +4,12 @@ namespace OsDsII.DTOS.Builders
     {
         private CustomerDTO _customerDto = new CustomerDTO();
 
+        public CustomerDtoBuilder WithId(int id)
+        {
+            _customerDto.Id = id;
+            return this;
+        }
+
         public CustomerDtoBuilder WithName(string name)
         {
             _customerDto.Name = name;

@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using OsDsII.Models;
 using OsDsII.Data;
 using OsDsII.DTOS;
+using OsDsII.Services;
 using OsDsII.Exceptions;
+using OsDsII.Http;
 
 namespace OsDsII.Controllers
 {
@@ -11,49 +13,25 @@ namespace OsDsII.Controllers
     [Route("api/v1/[controller]")]
     public class ServiceOrdersController : ControllerBase
     {
-        private readonly DataContext _dataContext;
-        private readonly ILogger<ServiceOrdersController> _logger;
+        private readonly IServiceOrdersService _serviceOrdersService;
 
-        public ServiceOrdersController(DataContext dataContext, ILogger<ServiceOrdersController> logger)
+        public ServiceOrdersController(IServiceOrdersService serviceOrdersService)
         {
-            _dataContext = dataContext;
-            _logger = logger;
+            _serviceOrdersService = serviceOrdersService;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateServiceOrderAsync([FromBody] ServiceOrderInput ordemServicoInput)
-        {
-            ServiceOrder createdServiceOrder = await Save(ordemServicoInput);
-            ServiceOrderDTO serviceOrderDto = createdServiceOrder.ToServiceOrder();
-            return Created("ServiceOrder", serviceOrderDto);
-        }
-
-        private async Task<ServiceOrder> Save(ServiceOrderInput serviceOrderInput)
-        {
-            // Get customer from database
-            Customer customer = await _dataContext.Customers.FirstOrDefaultAsync(c => c.Id == serviceOrderInput.Id);
-
-            // Create a ServiceOrder object from the ServiceOrderInput
-            ServiceOrder serviceOrder = ServiceOrder.FromServiceOrderInput(serviceOrderInput, customer);
-
-            // Add to database
-            var createdServiceOrder = _dataContext.ServiceOrders.Add(serviceOrder);
-            await _dataContext.SaveChangesAsync();
-
-            return serviceOrder;
-        }
 
         [HttpGet]
         public async Task<IActionResult> GetAllServiceOrderAsync()
         {
             try
             {
-                List<ServiceOrder> serviceOrderList = await _dataContext.ServiceOrders.Include(c => c.Customer).ToListAsync();
-                return Ok(serviceOrderList);
+                IEnumerable<ServiceOrderDTO> serviceOrderList = await _serviceOrdersService.GetServiceOrdersAsync();
+                return HttpResponseApi<IEnumerable<ServiceOrderDTO>>.Ok(serviceOrderList);
             }
-            catch (Exception ex)
+            catch (BaseException ex)
             {
-                return BadRequest();
+                return ex.GetResponse();
             }
         }
 
@@ -62,20 +40,20 @@ namespace OsDsII.Controllers
         {
             try
             {
-                ServiceOrder serviceOrder = await _dataContext.ServiceOrders
-                .Include(c => c.Customer)
-                .FirstOrDefaultAsync(serviceOrder => serviceOrder.Id == id);
-                if (serviceOrder is null)
-                {
-                    _logger.LogInformation("NOT FOUND");
-                    throw new Exception();
-                }
-                return Ok(serviceOrder);
+                ServiceOrderDTO serviceOrder = await _serviceOrdersService.GetServiceOrderByIdAsync(id);
+                return HttpResponseApi<ServiceOrderDTO>.Ok(serviceOrder);
             }
-            catch (Exception ex)
+            catch (BaseException ex)
             {
-                return BadRequest();
+                return ex.GetResponse();
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateServiceOrderAsync([FromBody] ServiceOrderInput serviceOrderInput)
+        {
+            ServiceOrderDTO createdServiceOrder = await _serviceOrdersService.SaveServiceOrder(serviceOrderInput);
+            return HttpResponseApi<ServiceOrderDTO>.Created(createdServiceOrder);
         }
 
         [HttpPut("{id}/status/finish")]
@@ -83,11 +61,7 @@ namespace OsDsII.Controllers
         {
             try
             {
-                ServiceOrder serviceOrder = await _dataContext.ServiceOrders.FirstOrDefaultAsync(serviceOrder => serviceOrder.Id == id);
-
-                serviceOrder.FinishOS();
-                _dataContext.ServiceOrders.Update(serviceOrder);
-                await _dataContext.SaveChangesAsync();
+                await _serviceOrdersService.FinishServiceOrderAsync(id);
                 return NoContent();
 
             }
@@ -102,10 +76,8 @@ namespace OsDsII.Controllers
         {
             try
             {
-                ServiceOrder serviceOrder = await _dataContext.ServiceOrders.FirstOrDefaultAsync(s => id == s.Id);
-                serviceOrder.Cancel();
-                _dataContext.ServiceOrders.Update(serviceOrder);
-                await _dataContext.SaveChangesAsync();
+                await _serviceOrdersService.CancelServiceOrderAsync(id);
+
                 return NoContent();
             }
             catch (BaseException ex)

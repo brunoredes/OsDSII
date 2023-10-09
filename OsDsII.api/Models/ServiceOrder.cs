@@ -80,7 +80,7 @@ namespace OsDsII.Models
                 .WithStatus(Status)
                 .WithOpeningDate(OpeningDate)
                 .WithFinishDate()
-                .WithCustomer(new CustomerDTO())
+                .WithCustomer(Customer?.ToCustomer())
                 .Build();
             return serviceOrderDTO;
         }
