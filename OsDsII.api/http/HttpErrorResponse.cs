@@ -1,6 +1,6 @@
 namespace OsDsII.api.http
 {
-    public record HttpErrorResponse
+    public class HttpErrorResponse
     {
         public string ErrorCode { get; set; }
         public string Message { get; set; }

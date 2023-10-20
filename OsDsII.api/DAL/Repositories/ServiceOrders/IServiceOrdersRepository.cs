@@ -7,4 +7,5 @@ public interface IServiceOrdersRepository
     public Task<ServiceOrder> GetServiceOrderByIdAsync(int id);
     public Task CreateServiceOrderAsync(ServiceOrder serviceOrder);
     public void UpdateServiceOrder(ServiceOrder serviceOrder);
+    public Task<ServiceOrder> GetServiceOrderWithComments(int serviceOrderId);
 }

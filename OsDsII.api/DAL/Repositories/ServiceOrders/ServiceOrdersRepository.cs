@@ -35,5 +35,13 @@ public class ServiceOrdersRepository : IServiceOrdersRepository
         _dataContext.ServiceOrders.Update(serviceOrder);
     }
 
+    public async Task<ServiceOrder> GetServiceOrderWithComments(int serviceOrderId)
+    {
+        return await _dataContext.ServiceOrders
+                .Include(c => c.Customer)
+                .Include(c => c.Comments)
+                .FirstOrDefaultAsync(s => s.Id == serviceOrderId);
+    }
+
 
 }

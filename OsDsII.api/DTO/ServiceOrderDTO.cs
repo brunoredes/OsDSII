@@ -2,7 +2,7 @@ using OsDsII.api.Models;
 
 namespace OsDsII.api.DTO
 {
-    public record ServiceOrderDTO
+    public class ServiceOrderDTO
     {
         public int Id { get; set; }
         public string? Description { get; set; }
