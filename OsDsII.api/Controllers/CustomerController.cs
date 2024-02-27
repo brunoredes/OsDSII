@@ -83,7 +83,7 @@ namespace OsDsII.api.Controllers
                 Customer currentCustomer = await _dataContext.Customers.FirstOrDefaultAsync(c => c.Id == customer.Id);
                 if (customer is null)
                 {
-                    throw new Exception('Customer not found');
+                    throw new Exception("Customer not found");
                 }
                 _dataContext.Customers.Update(customer);
                 await _dataContext.SaveChangesAsync();
