@@ -1,16 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using OsDsII.api.http;
-using OsDsII.api.Models;
 using OsDsII.api.Data;
-using OsDsII.api.Services.Comments;
-using OsDsII.api.DTO;
+using OsDsII.api.Models;
 
 namespace OsDsII.api.Controllers
 {
 
     [ApiController]
-    [Route("api/v1/ServiceOrders/{id}/comment")]
+    [Route("ServiceOrders/{id}/comment")]
     public class CommentController : ControllerBase
     {
         private readonly DataContext _context;
@@ -21,17 +18,19 @@ namespace OsDsII.api.Controllers
             _context = context;
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(HttpResponseApi<ServiceOrderDetailDTO>))]
         [HttpGet]
-        public async Task<IActionResult> GetCommentsAsync([FromRoute(Name = "id")] int serviceOrderId)
+        public async Task<IActionResult> GetCommentsAsync(int serviceOrderId)
         {
-            ServiceOrderDetailDTO serviceOrderDetailDTO = await _commentsService.GetCommentAsync(serviceOrderId);
-            return HttpResponseApi<ServiceOrderDetailDTO>.Ok(serviceOrderDetailDTO);
-            
+            ServiceOrder serviceOrderWithComments = await _context.ServiceOrders
+                .Include(c => c.Customer)
+                .Include(c => c.Comments)
+                .FirstOrDefaultAsync(s => s.Id == serviceOrderId);
+            return Ok(serviceOrderWithComments);
+
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddComment([FromRoute(Name = "id")] int serviceOrderId, [FromBody] CommentInput commentInput)
+        public async Task<IActionResult> AddComment(int serviceOrderId, Comment comment)
         {
             try
             {
@@ -39,24 +38,15 @@ namespace OsDsII.api.Controllers
 
                 if (os == null)
                 {
-                    return NotFound("ServiceOrder not found.");
+                    throw new Exception("ServiceOrder not found.");
                 }
 
-                Comment comment = HandleCommentObject(serviceOrderId, commentInput.Description);
+                Comment commentExists = HandleCommentObject(serviceOrderId, comment.Description);
 
-                await _context.Comments.AddAsync(comment); // This line adds the comment to the context
+                await _context.Comments.AddAsync(commentExists); // This line adds the comment to the context
                 await _context.SaveChangesAsync();
 
-                CommentDTO commentDto = new CommentDTO
-                {
-                    Id = comment.Id,
-                    Description = comment.Description,
-                    ServiceOrderId = comment.ServiceOrderId,
-                    SendDate = comment.SendDate,
-                };
-
-
-                return Created("Comment created successfully", commentDto);
+                return Ok(commentExists);
             }
             catch (Exception ex)
             {
@@ -66,9 +56,11 @@ namespace OsDsII.api.Controllers
 
         private Comment HandleCommentObject(int id, string description)
         {
-            Comment comment = new Comment();
-            comment.Description = description;
-            comment.ServiceOrderId = id;
+            Comment comment = new Comment
+            {
+                Description = description,
+                ServiceOrderId = id
+            };
             return comment;
         }
     }

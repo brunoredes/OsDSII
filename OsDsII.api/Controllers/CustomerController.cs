@@ -1,61 +1,62 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using OsDsII.api.Data;
 using OsDsII.api.Models;
-using OsDsII.api.DTO;
-using OsDsII.api.http;
-using OsDsII.api.Services.Customers;
-using OsDsII.api.Exceptions;
 
 namespace OsDsII.api.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("[controller]")]
     public class CustomersController : ControllerBase
     {
-        private readonly ICustomersService _customersService;
-        public CustomersController(ICustomersService customersService)
+        private readonly DataContext _dataContext;
+        public CustomersController(DataContext dataContext)
         {
-            _customersService = customersService;
+            _dataContext = dataContext;
         }
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(HttpResponseApi<IEnumerable<CustomerDTO>>))]
         public async Task<IActionResult> GetAllAsync()
         {
-            IEnumerable<Customer> customers = await _customersService.GetAllAsync();
-            IEnumerable<CustomerDTO> customersDTO = customers.Select(customer => customer.ToCustomer());
-            return HttpResponseApi<IEnumerable<CustomerDTO>>.Ok(customersDTO);
+            List<Customer> customers = await _dataContext.Customers.ToListAsync();
+            return Ok(customers);
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(HttpResponseApi<CustomerDTO>))]
-        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(HttpErrorResponse))]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             try
             {
-                Customer customer = await _customersService.GetByIdAsync(id);
-                CustomerDTO customerDto = customer.ToCustomer();
-                return HttpResponseApi<CustomerDTO>.Ok(customerDto);
+                Customer customer = await _dataContext.Customers.FirstOrDefaultAsync(c => c.Id == id);
+                if (customer is null)
+                {
+                    return BadRequest("Customer not found");
+                }
+                return Ok(customer);
             }
-            catch (BaseException ex)
+            catch (Exception ex)
             {
-                return ex.GetResponse();
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(HttpResponseApi<CustomerDTO>))]
-        public async Task<IActionResult> CreateCustomerAsync([FromBody] Customer customer)
+        public async Task<IActionResult> CreateCustomerAsync(Customer customer)
         {
             try
             {
-                Customer customerExists = await _customersService.CreateCustomerAsync(customer);
-                CustomerDTO customerDto = customerExists.ToCustomer();
-                return HttpResponseApi<CustomerDTO>.Created(customerDto);
+                Customer customerExists = await _dataContext.Customers.FirstOrDefaultAsync(c => c.Email == customer.Email);
+                if (customerExists != null && !customerExists.Equals(customer))
+                {
+                    return BadRequest("Customer already exists");
+                }
+                await _dataContext.Customers.AddAsync(customer);
+                await _dataContext.SaveChangesAsync();
+
+                return Ok(customer);
             }
-            catch (BaseException ex)
+            catch (Exception ex)
             {
-                // _logger.Log(LogLevel.Information, nameof(CustomersController), new { Message = ex.Message });
-                return ex.GetResponse();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -64,27 +65,33 @@ namespace OsDsII.api.Controllers
         {
             try
             {
-                await _customersService.DeleteCustomerAsync(id);
-                return NoContent();
+                Customer customer = await _dataContext.Customers.FirstOrDefaultAsync(c => c.Id == id);
+                _dataContext.Customers.Remove(customer);
+                return Ok();
             }
-            catch (BaseException ex)
+            catch (Exception ex)
             {
-                return ex.GetResponse();
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCustomerAsync(int id, [FromBody] Customer customer)
+        public async Task<IActionResult> UpdateCustomerAsync(Customer customer)
         {
             try
             {
-                await _customersService.UpdateCustomerAsync(id, customer);
-                return NoContent();
+                Customer currentCustomer = await _dataContext.Customers.FirstOrDefaultAsync(c => c.Id == customer.Id);
+                if (customer is null)
+                {
+                    throw new Exception('Customer not found');
+                }
+                _dataContext.Customers.Update(customer);
+                await _dataContext.SaveChangesAsync();
+                return Ok();
             }
-            catch (BaseException ex)
+            catch (Exception ex)
             {
-                // _logger.LogError(ex.Message, new { Timestamp = DateTimeOffset.Now, ErrorCode = "ERROR_CODE", Message = "", UriPath = HttpContext.Request.Path });
-                return ex.GetResponse();
+                return BadRequest(ex.Message);
             }
         }
     }

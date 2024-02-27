@@ -1,10 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using OsDsII.DAL.UnitOfWork;
-using System.Text.Json.Serialization;
-using OsDsII.api.DAL.Repositories.ServiceOrders;
-using OsDsII.api.Services.ServiceOrders;
-using OsDsII.api.DAL.Repositories.Customers;
-using OsDsII.api.Services.Customers;
 using OsDsII.api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,13 +12,6 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(connectionString, serverVersion);
 });
 // Add services to the container.
-
-builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
-builder.Services.AddScoped<IServiceOrdersRepository, ServiceOrdersRepository>();
-builder.Services.AddScoped<ICustomersService, CustomersService>();
-builder.Services.AddScoped<IServiceOrdersService, ServiceOrdersService>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 
 builder.Services.AddCors();
 

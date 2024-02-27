@@ -2,22 +2,18 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OsDsII.api.Data;
 using OsDsII.api.Models;
-using OsDsII.api.Services.ServiceOrders;
-using OsDsII.api.DTO;
-using OsDsII.api.Exceptions;
-using OsDsII.api.http;
 
 namespace OsDsII.api.Controllers
 {
     [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("[controller]")]
     public class ServiceOrdersController : ControllerBase
     {
-        private readonly IServiceOrdersService _serviceOrdersService;
+        private readonly DataContext _dataContext;
 
-        public ServiceOrdersController(IServiceOrdersService serviceOrdersService)
+        public ServiceOrdersController(DataContext dataContext)
         {
-            _serviceOrdersService = serviceOrdersService;
+            _dataContext = dataContext;
         }
 
 
@@ -26,12 +22,12 @@ namespace OsDsII.api.Controllers
         {
             try
             {
-                IEnumerable<ServiceOrderDTO> serviceOrderList = await _serviceOrdersService.GetServiceOrdersAsync();
-                return HttpResponseApi<IEnumerable<ServiceOrderDTO>>.Ok(serviceOrderList);
+                List<ServiceOrder> serviceOrders = await _dataContext.ServiceOrders.ToListAsync();
+                return Ok(serviceOrders);
             }
-            catch (BaseException ex)
+            catch (Exception ex)
             {
-                return ex.GetResponse();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -40,20 +36,45 @@ namespace OsDsII.api.Controllers
         {
             try
             {
-                ServiceOrderDTO serviceOrder = await _serviceOrdersService.GetServiceOrderByIdAsync(id);
-                return HttpResponseApi<ServiceOrderDTO>.Ok(serviceOrder);
+                ServiceOrder serviceOrder = await _dataContext.ServiceOrders.FirstOrDefaultAsync(s => s.Id == id);
+                if (serviceOrder is null)
+                {
+                    throw new Exception("Service order not found");
+                }
+                return Ok(serviceOrder);
             }
-            catch (BaseException ex)
+            catch (Exception ex)
             {
-                return ex.GetResponse();
+                return BadRequest(ex.Message);
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateServiceOrderAsync([FromBody] ServiceOrderInput serviceOrderInput)
+        public async Task<IActionResult> CreateServiceOrderAsync(ServiceOrder serviceOrder)
         {
-            ServiceOrderDTO createdServiceOrder = await _serviceOrdersService.SaveServiceOrder(serviceOrderInput);
-            return HttpResponseApi<ServiceOrderDTO>.Created(createdServiceOrder);
+            try
+            {
+                if (serviceOrder is null)
+                {
+                    throw new Exception("Service order cannot be null");
+                }
+
+                Customer customer = await _dataContext.Customers.FirstOrDefaultAsync(c => serviceOrder.Customer.Id == c.Id);
+
+                if (customer is null)
+                {
+                    throw new Exception("Customer not found");
+                }
+
+                await _dataContext.ServiceOrders.AddAsync(serviceOrder);
+                var affectedRow = await _dataContext.SaveChangesAsync();
+                return Ok(affectedRow);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
         [HttpPut("{id}/status/finish")]
@@ -61,13 +82,21 @@ namespace OsDsII.api.Controllers
         {
             try
             {
-                await _serviceOrdersService.FinishServiceOrderAsync(id);
-                return NoContent();
+                ServiceOrder serviceOrder = await _dataContext.ServiceOrders.FirstOrDefaultAsync(s => s.Id == id);
+                if (serviceOrder is null)
+                {
+                    throw new Exception("Service order cannot be null");
+                }
+
+                serviceOrder.FinishOS();
+                _dataContext.ServiceOrders.Update(serviceOrder);
+                await _dataContext.SaveChangesAsync();
+                return Ok();
 
             }
-            catch (BaseException ex)
+            catch (Exception ex)
             {
-                return ex.GetResponse();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -76,13 +105,21 @@ namespace OsDsII.api.Controllers
         {
             try
             {
-                await _serviceOrdersService.CancelServiceOrderAsync(id);
+                ServiceOrder serviceOrder = await _dataContext.ServiceOrders.FirstOrDefaultAsync(s => s.Id == id);
+                if (serviceOrder is null)
+                {
+                    throw new Exception("Service order cannot be null");
+                }
 
-                return NoContent();
+                serviceOrder.Cancel();
+                _dataContext.ServiceOrders.Update(serviceOrder);
+                await _dataContext.SaveChangesAsync();
+
+                return Ok();
             }
-            catch (BaseException ex)
+            catch (Exception ex)
             {
-                return ex.GetResponse();
+                return BadRequest(ex.Message);
             }
         }
     }

@@ -1,12 +1,16 @@
 # OS DSII
+
 > Web API para ordens de serviço de determinado produto
 
+![Diagrama de classe]("./docs/diagram.png")
+
 ## Tecnologias utilizadas
+
 - ASP .NET 7.0
 - SQL Server
 
-
 ## como criar o projeto
+
 ```shell
 $ dotnet new sln -o osdsii
 $ dotnet new webapi -o OsDsII.api
@@ -17,6 +21,7 @@ $ dotnet add ./OsDsII.api/OsDsII.csproj reference ./OsDsII.Tests/OsDsII.Tests.cs
 ```
 
 ## TODO
+
 - [ ] Adicionar Xunit para testes unitários
 - [ ] Adicionar InMemoryDatabase para testes de integração e e2e
 - [ ] Adicionar workflow .net asp no github
