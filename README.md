@@ -2,7 +2,7 @@
 
 > Web API para ordens de serviço de determinado produto
 
-![Diagrama de classe]("./docs/diagram.png")
+![Diagrama de classe](docs/diagram.png)
 
 ## Tecnologias utilizadas
 
