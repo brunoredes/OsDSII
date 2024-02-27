@@ -11,7 +11,6 @@ namespace OsDsII.api.Controllers
     public class CommentController : ControllerBase
     {
         private readonly DataContext _context;
-        private readonly ICommentsService _commentsService;
 
         public CommentController(DataContext context)
         {
